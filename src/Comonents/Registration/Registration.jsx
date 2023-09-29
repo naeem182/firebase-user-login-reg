@@ -1,4 +1,7 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React from 'react'
+import auth from '../../firebase.config';
+
 
 const Registration = () => {
 
@@ -6,9 +9,21 @@ const Registration = () => {
         e.preventDefault();
         // console.log("for  sub");
         const email = e.target.email.value
-        const pass = e.target.password.value
-        console.log(email, pass)
+        const password = e.target.password.value
+        console.log(email, password)
+
+        //create user
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(result => {
+
+                console.log(result.user)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+
     }
+
 
 
     return (
@@ -26,7 +41,7 @@ const Registration = () => {
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="text" name='email' placeholder="email" className="input input-bordered" />
+                                <input type="email" name='email' placeholder="email" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
