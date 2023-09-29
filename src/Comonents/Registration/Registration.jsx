@@ -9,13 +9,15 @@ const Registration = () => {
     const [registerError, setRegisterError] = useState('');
     const [success, setSuccess] = useState('');
     const [showpass, setshowpass] = useState(false)
+    // const [accepted, setaccepted] = useState()
 
     const handleRegister = (e) => {
         e.preventDefault();
         // console.log("for  sub");
         const email = e.target.email.value
         const password = e.target.password.value
-        console.log(email, password)
+        const accept = e.target.terms.checked
+        console.log(email, password, accept)
 
 
 
@@ -33,7 +35,10 @@ const Registration = () => {
             setRegisterError("used a uppercase")
             return
         }
-
+        else if (!accept) {
+            setRegisterError('Please accept our terms and conditions!')
+            return;
+        }
         //create user
         createUserWithEmailAndPassword(auth, email, password)
             .then(result => {
@@ -76,6 +81,10 @@ const Registration = () => {
                                 <label className="label">
                                     <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                 </label>
+                            </div>
+                            <div className="mb-2">
+                                <input type="checkbox" name="terms" id="terms" />
+                                <label className="ml-2" htmlFor="terms">Accept our <a href="">Terms and Conditions</a></label>
                             </div>
                             <div className="form-control mt-6">
                                 <input type="submit" />
