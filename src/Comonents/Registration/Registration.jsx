@@ -1,9 +1,14 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import React from 'react'
+import React, { useState } from 'react'
 import auth from '../../firebase.config';
 
 
 const Registration = () => {
+
+
+    const [registerError, setRegisterError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [showpass, setshowpass] = useState(false)
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -12,14 +17,34 @@ const Registration = () => {
         const password = e.target.password.value
         console.log(email, password)
 
+
+
+
+        // reset error and success
+        setRegisterError('');
+        setSuccess('');
+
+
+        if (password.length < 6) {
+            setRegisterError('Password should be at least 6 characters or longer');
+            return;
+        }
+        else if (!/[A-Z]/.test(password)) {
+            setRegisterError("used a uppercase")
+            return
+        }
+
         //create user
         createUserWithEmailAndPassword(auth, email, password)
             .then(result => {
 
                 console.log(result.user)
+                setSuccess("created succesfully")
+                return
             })
             .catch(error => {
                 console.error(error)
+                setRegisterError(error.message)
             })
 
     }
@@ -41,13 +66,13 @@ const Registration = () => {
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="email" name='email' placeholder="email" className="input input-bordered" />
+                                <input type="email" name='email' placeholder="email" className="input input-bordered" required />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="password" placeholder="password" name='password' className="input input-bordered" />
+                                <input type={showpass ? "text" : "password"} placeholder="password" name='password' className="input input-bordered" /> <span onClick={() => setshowpass(!showpass)} >show</span>
                                 <label className="label">
                                     <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                 </label>
@@ -56,8 +81,15 @@ const Registration = () => {
                                 <input type="submit" />
                             </div>
                         </div>
+                        {
+                            registerError && <p className="text-red-700">{registerError}</p>
+                        }
+                        {
+                            success && <p className="text-green-600">{success}</p>
+                        }
 
                     </form>
+
                 </div>
             </div>
         </div>
