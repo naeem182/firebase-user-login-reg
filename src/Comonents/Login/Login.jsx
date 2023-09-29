@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useRef, useState } from 'react';
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import auth from '../../firebase.config';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [registerError, setRegisterError] = useState('');
     const [success, setSuccess] = useState('');
-
+    const emailRef = useRef(null)
     const handleLogedIn = (e) => {
         e.preventDefault();
         const email = e.target.email.value;
@@ -26,6 +26,25 @@ const Login = () => {
                 setRegisterError(error.message);
             });
     };
+    const handleforgetPassword = () => {
+        const email = emailRef.current.value;
+        if (!email) {
+            console.log('pelase provide an email', emailRef.current.value)
+            return;
+        }
+        else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            console.log('please write a valid email')
+            return;
+        }
+        // send validation email
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert('please check your email')
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
     return (
         <div className="hero min-h-screen bg-base-200">
@@ -49,6 +68,7 @@ const Login = () => {
                                     type="text"
                                     name="email"
                                     placeholder="email"
+                                    ref={emailRef}
                                     className="input input-bordered"
                                 />
                             </div>
@@ -63,7 +83,7 @@ const Login = () => {
                                     className="input input-bordered"
                                 />
                                 <label className="label">
-                                    <a href="#" className="label-text-alt link link-hover">
+                                    <a onClick={handleforgetPassword} href="#" className="label-text-alt link link-hover">
                                         Forgot password?
                                     </a>
                                 </label>
