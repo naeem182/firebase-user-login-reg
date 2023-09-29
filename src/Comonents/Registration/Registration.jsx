@@ -4,8 +4,12 @@ const Registration = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
-        console.log("for  sub")
+        // console.log("for  sub");
+        const email = e.target.email.value
+        const pass = e.target.password.value
+        console.log(email, pass)
     }
+
 
     return (
         <div className="hero min-h-screen bg-base-200">
