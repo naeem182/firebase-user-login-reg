@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react'
 import auth from '../../firebase.config';
+import { Link } from 'react-router-dom';
 
 
 const Registration = () => {
@@ -78,9 +79,7 @@ const Registration = () => {
                                     <span className="label-text">Password</span>
                                 </label>
                                 <input type={showpass ? "text" : "password"} placeholder="password" name='password' className="input input-bordered" /> <span onClick={() => setshowpass(!showpass)} >show</span>
-                                <label className="label">
-                                    <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-                                </label>
+
                             </div>
                             <div className="mb-2">
                                 <input type="checkbox" name="terms" id="terms" />
@@ -98,6 +97,7 @@ const Registration = () => {
                         }
 
                     </form>
+                    <p>Already have an account?<button className=' btn'> <Link to={'/login'}>log in</Link> </button></p>
 
                 </div>
             </div>
